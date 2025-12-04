@@ -345,6 +345,3 @@ Building losses use FEMA Hazus wind damage functions:
 
 All probabilistic assignments use a fixed random seed (121) to ensure reproducible results across runs.
 
-## Acknowledgments
-
-This research was supported by [Funding source]. NCAR climate model simulations were provided by [Institution/Project]. Building inventory data from FEMA's National Structure Inventory. Wind damage methodology based on FEMA's Hazus model.
