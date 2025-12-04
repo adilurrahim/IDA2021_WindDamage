@@ -1,0 +1,141 @@
+════════════════════════════════════════════════════════════════════════
+  GIT QUICK REFERENCE - Copy & Paste Commands
+════════════════════════════════════════════════════════════════════════
+
+FIRST TIME SETUP (Do Once)
+═══════════════════════════════════════════════════════════════════════
+
+1. Configure Git:
+   git config --global user.name "Your Name"
+   git config --global user.email "your.email@example.com"
+
+2. Navigate to project folder:
+   cd "c:\Computer backup\projects\LSU_NSF_IDA_WindAnalysis\github_publication"
+
+3. Initialize Git:
+   git init
+
+4. Add all files:
+   git add .
+
+5. Create first commit:
+   git commit -m "Initial commit: Hurricane Ida wind loss analysis pipeline"
+
+6. Rename branch to main:
+   git branch -M main
+
+7. Connect to GitHub (replace with YOUR URL):
+   git remote add origin https://github.com/YourUsername/ida-wind-loss-analysis.git
+
+8. Push to GitHub:
+   git push -u origin main
+
+   When prompted:
+   - Username: YourGitHubUsername
+   - Password: YOUR_PERSONAL_ACCESS_TOKEN (not your GitHub password!)
+
+   Get token at: https://github.com/settings/tokens
+
+═══════════════════════════════════════════════════════════════════════
+DAILY WORKFLOW (After Setup)
+═══════════════════════════════════════════════════════════════════════
+
+After making changes to your code:
+
+1. Check what changed:
+   git status
+
+2. Add changed files:
+   git add .
+
+3. Commit with message:
+   git commit -m "Description of what you changed"
+
+4. Push to GitHub:
+   git push
+
+═══════════════════════════════════════════════════════════════════════
+USEFUL COMMANDS
+═══════════════════════════════════════════════════════════════════════
+
+View history:
+   git log --oneline
+
+View current status:
+   git status
+
+See what changed:
+   git diff
+
+Undo changes to a file (before commit):
+   git checkout -- filename.py
+
+Pull latest from GitHub:
+   git pull
+
+═══════════════════════════════════════════════════════════════════════
+CREATE GITHUB PERSONAL ACCESS TOKEN
+═══════════════════════════════════════════════════════════════════════
+
+1. Go to: https://github.com/settings/tokens
+2. Click "Generate new token" → "Generate new token (classic)"
+3. Note: "Git access for Ida analysis"
+4. Expiration: Choose duration
+5. Check: ☑ repo
+6. Click "Generate token"
+7. COPY THE TOKEN (save it somewhere safe!)
+8. Use this token as password when git asks
+
+═══════════════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════
+
+If "not a git repository":
+   cd "c:\Computer backup\projects\LSU_NSF_IDA_WindAnalysis\github_publication"
+   git init
+
+If authentication failed:
+   - Use Personal Access Token (not GitHub password)
+   - Get token: https://github.com/settings/tokens
+
+If push rejected:
+   git pull origin main --allow-unrelated-histories
+   git push origin main
+
+═══════════════════════════════════════════════════════════════════════
+COMPLETE SETUP SCRIPT (Copy All)
+═══════════════════════════════════════════════════════════════════════
+
+# Step 1: Configure Git (change these!)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Step 2: Navigate to project
+cd "c:\Computer backup\projects\LSU_NSF_IDA_WindAnalysis\github_publication"
+
+# Step 3: Initialize and add files
+git init
+git add .
+git commit -m "Initial commit: Hurricane Ida wind loss analysis pipeline"
+
+# Step 4: Rename branch
+git branch -M main
+
+# Step 5: Connect to GitHub (CHANGE THIS URL!)
+git remote add origin https://github.com/YourUsername/ida-wind-loss-analysis.git
+
+# Step 6: Push to GitHub
+git push -u origin main
+
+# Enter username and Personal Access Token when prompted
+
+═══════════════════════════════════════════════════════════════════════
+
+DONE! Your code is now on GitHub! 🎉
+
+Repository URL:
+https://github.com/YourUsername/ida-wind-loss-analysis
+
+Include this URL in your Nature Climate Change manuscript!
+
+═══════════════════════════════════════════════════════════════════════

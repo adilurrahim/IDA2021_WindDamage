@@ -1,0 +1,32 @@
+# Hurricane Ida Wind Loss Analysis Pipeline - Python Dependencies
+#
+# Install all dependencies with:
+#   pip install -r requirements.txt
+#
+# Or create a conda environment:
+#   conda create -n ida_analysis python=3.10
+#   conda activate ida_analysis
+#   pip install -r requirements.txt
+
+# Core numerical and data processing libraries
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+
+# Geospatial libraries
+geopandas>=0.13.0
+shapely>=2.0.0
+
+# NetCDF file handling
+netCDF4>=1.6.0
+
+# Excel file support (for Hazus mapping files)
+openpyxl>=3.1.0
+
+# Note: These version constraints are minimum requirements.
+# The pipeline has been tested with:
+# - Python 3.10+
+# - numpy 1.26.0
+# - pandas 2.1.0
+# - geopandas 0.14.0
+# - netCDF4 1.6.4
