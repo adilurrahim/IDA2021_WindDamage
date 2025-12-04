@@ -17,7 +17,7 @@ The pipeline enables comparison of hurricane impacts across past, present, and f
 If you use this code, please cite:
 
 ```
-[Paper citation to be added upon publication in Nature Climate Change]
+
 ```
 
 ## Installation
@@ -59,23 +59,9 @@ The pipeline requires the following input data:
 - `lon_2d` - 2D longitude array
 - `lat_2d` - 2D latitude array
 
-**Data source:** [Add NCAR data repository URL]
-
 ### 2. NSI Building Inventory
 
 - `nsi_2022_22.gpkg` - National Structure Inventory GeoPackage for the study region
-
-**Required columns:**
-- `fd_id` - Foundation ID (unique building identifier)
-- `cbfips` - Census block FIPS code
-- `occtype` - Occupancy type
-- `bldgtype` - Building construction type
-- `nsi_val.SURFACEROU` - Surface roughness
-- `val_struct` - Structural replacement value ($)
-- `val_cont` - Contents replacement value ($)
-- Geometry column with building locations
-
-**Data source:** [FEMA National Structure Inventory](https://www.hec.usace.army.mil/confluence/nsi)
 
 ### 3. Hazus Mapping Files
 
@@ -89,8 +75,6 @@ The pipeline requires the following input data:
 - `huListofBldgChar` - Building characteristic definitions
 - `huListOfWindBldgTypes` - Wind building type definitions
 - `huTerrain` - Terrain classification definitions
-
-**Data source:** [FEMA Hazus](https://www.fema.gov/flood-maps/products-tools/hazus)
 
 ### Data Organization
 
@@ -125,7 +109,7 @@ python main_pipeline.py \
 
 ### Using Existing Building Characterization
 
-The building characterization step (Step 3A) is computationally expensive (30-60 minutes). Once computed, the results are automatically checkpointed. To explicitly use an existing checkpoint:
+The building characterization step (Step 3A) is computationally expensive. Once computed, the results are automatically checkpointed. To explicitly use an existing checkpoint:
 
 ```bash
 python main_pipeline.py \
@@ -196,7 +180,6 @@ Processes NCAR climate model NetCDF files to CSV format:
 
 **Outputs:** `output/processed_wind/ida_YYYY.csv` for each scenario
 
-**Processing time:** ~2-5 minutes for all three files
 
 ### Step 2: Spatial Join
 
@@ -212,7 +195,6 @@ Spatially joins NSI building locations with NCAR wind grid points:
 
 **Outputs:** `output/joined_data/ida_YYYY/ida_YYYY.csv` for each scenario
 
-**Processing time:** ~10-20 minutes depending on building count
 
 ### Step 3: Loss Calculation
 
@@ -232,8 +214,6 @@ Maps NSI buildings to Hazus building types and damage functions:
 
 **Checkpoint:** `output/building_inventory/nsi_wbId_sr.csv`
 
-**⚠️ First run:** 30-60 minutes (expensive!)
-**Subsequent runs:** ~seconds (loads checkpoint)
 
 #### Step 3B: Individual Building Losses
 
@@ -251,7 +231,6 @@ Aggregates building losses to county level and creates summary:
 
 **Output:** `output/results/TotalLoss.csv`
 
-**Processing time:** ~20-40 minutes for steps 3A-3C (or ~5-10 minutes with existing checkpoint)
 
 ## Output Directory Structure
 
@@ -314,25 +293,7 @@ output/
 | Contents | float | Total contents loss ($) |
 | Total | float | Combined building + contents loss ($) |
 
-## Computational Requirements
 
-### Hardware Recommendations
-
-- **CPU:** Multi-core processor (4+ cores recommended)
-- **RAM:** 16 GB minimum, 32 GB recommended
-- **Storage:** ~10 GB free space for outputs
-
-### Processing Time Estimates
-
-| Step | First Run | Subsequent Runs (with caching) |
-|------|-----------|-------------------------------|
-| Step 1: NetCDF Processing | 2-5 min | ~seconds (if outputs exist) |
-| Step 2: Spatial Join | 10-20 min | ~seconds (if outputs exist) |
-| Step 3A: Building Characterization | 30-60 min | ~seconds (loads checkpoint) |
-| Step 3B-3C: Loss Calculation | 10-20 min | ~seconds (if outputs exist) |
-| **Total Pipeline** | **~1-2 hours** | **~15-30 minutes** |
-
-**Note:** Times vary based on hardware, study region size, and building count.
 
 ## Logging
 
@@ -383,90 +344,6 @@ Building losses use FEMA Hazus wind damage functions:
 ### Reproducibility
 
 All probabilistic assignments use a fixed random seed (121) to ensure reproducible results across runs.
-
-## Troubleshooting
-
-### Common Errors
-
-**Error: NetCDF file not found**
-- Verify all three NetCDF files exist in the `--ncar-dir`
-- Check filenames match exactly: `ida_1971.nc`, `ida_2021.nc`, `ida_2071.nc`
-
-**Error: Missing NetCDF variables**
-- Ensure NetCDF files contain: `swath_wind`, `lon_2d`, `lat_2d`
-- Check NetCDF structure with: `ncdump -h file.nc`
-
-**Error: NSI file not found**
-- Verify GeoPackage exists at `--nsi-path`
-- Check file format is GeoPackage (.gpkg), not Shapefile
-
-**Error: Hazus files not found**
-- Ensure both `Mapping.xlsx` and `huDamLossFunc.csv` exist in `--hazus-dir`
-- Verify Excel file has all required sheets (see Data Requirements)
-
-**Warning: Buildings missing wind data**
-- Some buildings may be outside the NCAR wind swath
-- Check spatial join distance statistics in log file
-
-### Performance Issues
-
-**Building characterization taking too long:**
-- This step normally takes 30-60 minutes
-- Progress logged every 10 counties
-- Once complete, checkpoint is saved for reuse
-
-**Out of memory errors:**
-- Increase available RAM
-- Process smaller geographic subsets if possible
-
-**Spatial join slow:**
-- Expected for large building counts
-- Consider using higher-performance hardware
-
-## Project Structure
-
-```
-LSU_NSF_IDA_WindAnalysis/
-├── main_pipeline.py          # Main pipeline orchestrator
-├── config.py                 # Configuration constants
-├── requirements.txt          # Python dependencies
-├── README.md                 # This file
-├── modules/                  # Pipeline modules
-│   ├── __init__.py
-│   ├── netcdf_processor.py  # Step 1: NetCDF processing
-│   ├── spatial_join.py      # Step 2: Spatial join
-│   └── building_losses.py   # Step 3: Loss calculation
-├── data/                     # Input data (user-provided)
-│   ├── ncar_netcdf/
-│   ├── nsi/
-│   └── hazus/
-├── output/                   # Generated outputs
-│   ├── processed_wind/
-│   ├── building_inventory/
-│   ├── joined_data/
-│   └── results/
-└── logs/                     # Execution logs
-```
-
-## Contributing
-
-This code is provided for reproducibility of the analysis presented in the associated publication. For questions or issues, please open an issue on the GitHub repository.
-
-## License
-
-[Add appropriate license]
-
-## Contact
-
-For questions about this code or the associated research:
-
-- [Author Name] - [email@example.com]
-- [Institution]
-
-For questions about data sources:
-- NCAR data: [Contact/URL]
-- NSI data: https://www.hec.usace.army.mil/confluence/nsi
-- Hazus: https://www.fema.gov/flood-maps/products-tools/hazus
 
 ## Acknowledgments
 
